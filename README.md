@@ -51,7 +51,6 @@ Built with secure coding practices and real-world logic, this tool provides inst
    ```bash
    git clone https://github.com/your-username/password-analyzer.git
    cd password-analyzer
-   Install Required Python Packages
 
 2. Install Required Python Packages
  pip install requests reportlab
