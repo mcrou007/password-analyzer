@@ -6,11 +6,9 @@ import requests
 with open("common_passwords.txt", "r") as file:
     common_passwords = file.read().splitlines()
 
-# Check if password is in the common list
 def check_common_passwords(password):
     return password in common_passwords
 
-# Check if password is found in a data breach
 def check_password_breach(password):
     sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
     prefix = sha1_password[:5]
@@ -28,7 +26,6 @@ def check_password_breach(password):
             return int(count)
     return 0
 
-# Score password strength
 def password_strength(password):
     score = 0
     length = len(password)
@@ -39,6 +36,7 @@ def password_strength(password):
     digits = any(c.isdigit() for c in password)
 
     characters = [upper_case, lower_case, special, digits]
+
     if length > 8:
         score += 1
     if length > 12:
@@ -48,18 +46,20 @@ def password_strength(password):
     if length > 20:
         score += 1
 
-    score += sum(characters) - 1
+    score += sum(characters) - 1  # max of 3
 
-    if score < 4:
-        return "Weak", score
-    elif score == 4:
-        return "Okay", score
-    elif 4 < score < 6:
-        return "Good", score
+    raw_score = score  # max = 7
+    score_out_of_10 = round((raw_score / 7) * 10)
+
+    if raw_score < 4:
+        return "Weak", score_out_of_10
+    elif raw_score == 4:
+        return "Okay", score_out_of_10
+    elif 4 < raw_score < 6:
+        return "Good", score_out_of_10
     else:
-        return "Strong", score
+        return "Strong", score_out_of_10
 
-# Return message and metrics
 def feedback(password):
     if check_common_passwords(password):
         msg = "❌ Password found in a common password list. Please try again."
@@ -72,9 +72,9 @@ def feedback(password):
 
     strength, score = password_strength(password)
 
-    msg = f"✅ Password strength: {strength} ({score}/7)\n"
+    msg = f"✅ Password strength: {strength} ({score}/10)\n"
 
-    if score < 4:
+    if score < 6:
         msg += "Suggestions to improve:\n"
         if len(password) <= 8:
             msg += "- Use more than 8 characters.\n"

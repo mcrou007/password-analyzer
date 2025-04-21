@@ -8,31 +8,33 @@ def save_report_as_pdf(log, filename="password_report.pdf"):
     pdf = canvas.Canvas(filename, pagesize=letter)
     _, height = letter
 
-    pdf.setFont("Helvetica-Bold", 14)
+    # Use Times-Roman instead of Helvetica
+    pdf.setFont("Times-Bold", 14)
     pdf.drawString(50, height - 50, "Password Analysis Report")
     pdf.line(50, height - 55, 550, height - 55)
 
     y = height - 80
-    pdf.setFont("Helvetica-Bold", 10)
+    pdf.setFont("Times-Bold", 10)
     pdf.drawString(50, y, "Password")
-    pdf.drawString(250, y, "Strength (Score)")
+    pdf.drawString(250, y, "Strength (Score/10)")
     pdf.drawString(420, y, "Breaches")
 
     y -= 20
-    pdf.setFont("Helvetica", 10)
+    pdf.setFont("Times-Roman", 10)
 
     for entry in log:
         pdf.drawString(50, y, entry['password'])
-        pdf.drawString(250, y, f"{entry['strength']} ({entry['score']}/7)")
+        pdf.drawString(250, y, f"{entry['strength']} ({entry['score']}/10)")
         pdf.drawString(420, y, str(entry['breaches']))
         y -= 20
         if y < 60:
             pdf.showPage()
             y = height - 80
+            pdf.setFont("Times-Roman", 10)
 
     pdf.save()
 
-# Main loop
+# Input loop
 while True:
     password = input("Enter your password: ")
     result, strength, score, breaches = feedback(password)
