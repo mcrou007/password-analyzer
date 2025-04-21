@@ -62,17 +62,17 @@ def password_strength(password):
 
 def feedback(password):
     if check_common_passwords(password):
-        msg = "❌ Password found in a common password list. Please try again."
+        msg = "Password found in a common password list. Please try again."
         return msg, "Weak", 0, 0
 
     breach_count = check_password_breach(password)
     if breach_count > 0:
-        msg = f"⚠️ Password appeared in {breach_count} breaches. Choose a different one."
+        msg = f"Password appeared in {breach_count} breaches. Choose a different one."
         return msg, "Weak", 0, breach_count
 
     strength, score = password_strength(password)
 
-    msg = f"✅ Password strength: {strength} ({score}/10)\n"
+    msg = f"Password strength: {strength} ({score}/10)\n"
 
     if score < 6:
         msg += "Suggestions to improve:\n"
