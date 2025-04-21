@@ -46,10 +46,17 @@ while True:
         "breaches": breaches
     })
 
-    again = input("\nTest another password? (y/n): ").strip().lower()
+    # ✅ Ask if they want to continue — safely validate input
+    while True:
+        again = input("\nTest another password? (y/n): ").strip().lower()
+        if again in ['y', 'n']:
+            break
+        else:
+            print("Please enter 'y' or 'n'.")
+
     if again != 'y':
         break
 
-# 💾 Save report AFTER user exits
+# 💾 Save report only after user exits
 save_report_as_pdf(session_log)
 print("\n✅ PDF report saved as 'password_report.pdf'")
